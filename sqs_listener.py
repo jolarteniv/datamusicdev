@@ -7,9 +7,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 # Configura el cliente SQS
 sqs = boto3.client('sqs', region_name='us-east-1')  # Cambia la región si es necesario
-queue_url = '${queue_url}'  # Parametrizar
+queue_url = 'https://sqs.us-east-1.amazonaws.com/879381286480/dev-datamusic-queue'  # Parametrizar
 
-output_dir = '${efs_mount_point}'
+output_dir = '/mnt/efs'
 output_file = os.path.join(output_dir, 'event_log.txt')
 lock_file = os.path.join(output_dir, 'lock')
 
@@ -45,7 +45,7 @@ def process_message(message, hostname, ip_address):
     os.remove(lock_file)
 
     # Genera carga de estrés
-    stress_test(${sleep_processing_time})
+    stress_test(10)
 
     # Elimina el mensaje de la cola
     sqs.delete_message(
@@ -67,7 +67,7 @@ def process_sqs_messages():
     hostname, ip_address = get_host_info()  # Obtener información del host
 
     # Crear un pool de hilos
-    with ThreadPoolExecutor(max_workers=${listener_threads}) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         while True:
             # Recibe mensajes de la cola SQS
             response = sqs.receive_message(
@@ -82,7 +82,7 @@ def process_sqs_messages():
                 for message in response['Messages']:
                     executor.submit(process_message, message, hostname, ip_address)
 
-            time.sleep(${listener_sleep_time})  # Espera antes de volver a verificar
+            time.sleep(10)  # Espera antes de volver a verificar
 
 if __name__ == "__main__":
     process_sqs_messages()

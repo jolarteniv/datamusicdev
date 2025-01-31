@@ -13,7 +13,7 @@ exec > $WORKING_DIR/provision.log 2>&1
 
 # Mount EFS and install libraries
 echo "[PROVISIONING] Instalando librerías..."
-sudo apt update -y && sudo apt install -y nfs-common python3.12 python3-pip python3-full unzip
+sudo apt update -y && sudo apt install -y nfs-common python3.12 python3-pip python3-full unzip git
 sudo sudo snap install aws-cli --classic
 echo "[PROVISIONING] Montando EFS..."
 sudo mkdir -p ${efs_mount_point}
@@ -31,6 +31,9 @@ sudo cat << EOF > ~/.aws/credentials
 aws_access_key_id = $AWS_ACCESS_KEY_ID
 aws_secret_access_key = $AWS_SECRET_ACCESS_KEY
 EOF
+
+#clone repo
+git clone git@github.com:jolarteniv/datamusicdev.git $WORKING_DIR
 
 # Create python virtual environment
 echo "[PROVISIONING] Creando entorno virtual de Python..."

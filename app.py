@@ -2,7 +2,7 @@ from flask import Flask, send_file
 import os
 
 app = Flask(__name__)
-output_file = '${efs_mount_point}/event_log.txt'
+output_file = '/mnt/efs/event_log.txt'
 
 @app.route('/')
 def get_event_log():
