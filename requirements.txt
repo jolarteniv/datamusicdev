@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+mysql-connector-python
+librosa
+numpy
+mutagen
+pandas
+boto3
+numba
+pydantic
+asyncio
